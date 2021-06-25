@@ -9,7 +9,7 @@ import os, csv
 import urllib.request as urllib
 import tempfile, shutil
 from pathlib import Path
-import imgurdownloader as id
+import Modules.imgurdownloader as id
 
 #############################################################################################
 #####Functions

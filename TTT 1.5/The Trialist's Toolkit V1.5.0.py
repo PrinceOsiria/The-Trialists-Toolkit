@@ -39,9 +39,8 @@ import tempfile
 #######################################################################
 # Program Variables
 # Selects Current Directory as Filesystem
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-rootFilesystem = str(Path(__file__).parent)
-
+rootFilesystem = str(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(rootFilesystem)
 # p108 Variables
 Alphabet = p108.create_alphabet("")
 
@@ -93,8 +92,8 @@ def CleanCSV(*args):
 def GenerateFilesystem(*args):
     filename = cleanCSVSelection.get()
     year = filename[:4]
-    pathtofiledir = rootFilesystem + "\Archives\Spreadsheets\Clean"
-    pathtoarchive = rootFilesystem + "\Archives\Filesystem"
+    pathtofiledir = rootFilesystem + "/Archives/Spreadsheets/Clean"
+    pathtoarchive = rootFilesystem + "/Archives/Filesystem"
     print((year, pathtofiledir, filename, pathtoarchive))
     Filesystem_Machine.generate_filesystem(year, pathtofiledir, filename, pathtoarchive)
 
@@ -151,7 +150,7 @@ def Generate_p108Bruter():
 
     def p108Bruter_bruteButton_clicked():
         p108.brute_hels(p108Bruter_alphabet["text"], p108Bruter_passphrases["text"], p108Bruter_ciphertext["text"])
-        subprocess.Popen(["notepad", rootFilesystem + "\Results\BruteResults.txt"])
+        subprocess.Popen(["notepad", rootFilesystem + "/Results/BruteResults.txt"])
 
     p108Bruter_bruteButton = Button(p108Bruter_bruteButtonFrame, width=50, text="BRUTE", command=p108Bruter_bruteButton_clicked)
     p108Bruter_bruteButton.pack(pady=25)
@@ -217,7 +216,7 @@ def Generate_p108Encoder():
 
     def p108Encoder_encodeButton_clicked():
         p108.encode_hels(p108Encoder_alphabet["text"], p108Encoder_passphrases["text"], p108Encoder_cleartext["text"])
-        subprocess.Popen(["notepad", rootFilesystem + "\Results\EncodeResults.txt"])
+        subprocess.Popen(["notepad", rootFilesystem + "/Results/EncodeResults.txt"])
 
     p108Encoder_encodeButton = Button(p108Encoder_encodeButtonFrame, width=50, text="ENCODE", command=p108Encoder_encodeButton_clicked)
     p108Encoder_encodeButton.pack(pady=25)
@@ -283,7 +282,7 @@ def Generate_p108Decoder():
 
     def p108Decoder_decodeButton_clicked():
         p108.decode_hels(p108Decoder_alphabet["text"], p108Decoder_passphrases["text"], p108Decoder_ciphertext["text"])
-        subprocess.Popen(["notepad", rootFilesystem + "\Results\DecodeResults.txt"])
+        subprocess.Popen(["notepad", rootFilesystem + "/Results/DecodeResults.txt"])
 
     p108Decoder_encodeButton = Button(p108Decoder_encodeButtonFrame, width=50, text="DECODE", command=p108Decoder_decodeButton_clicked)
     p108Decoder_encodeButton.pack(pady=25)
@@ -297,7 +296,7 @@ def Generate_p108Decoder():
     p108Decoder_encodeButtonFrame.pack()
 
 def goto_url(link):
-    os.system("start \"\" " + link)
+    os.system("start /"/" " + link)
 
 #######################################################################
 #####Main
@@ -336,7 +335,7 @@ p107Frame = Frame(root, relief=SUNKEN, bd=1)
 # Archiving Tools
 #Downloads the most recent version of rawCSVLinks.csv
 update = "https://docs.google.com/spreadsheets/d/1AXzSbVALQ6QbEvqrzbj70vLLN84wa_v7ebhtCqEqUS0/export?format=csv&id=1AXzSbVALQ6QbEvqrzbj70vLLN84wa_v7ebhtCqEqUS0&gid=1877437768"
-file = r"\Archives\Spreadsheets\rawCSVLinks.csv"
+file = r"/Archives/Spreadsheets/rawCSVLinks.csv"
 with requests.get(update) as r:
     with open(rootFilesystem + file, "wb") as f:
         for data in r.iter_content():
@@ -344,15 +343,15 @@ with requests.get(update) as r:
         f.close()
 
 #Downloads latest raw spreadsheets
-os.makedirs(rootFilesystem + "\Archives\Spreadsheets\Raw\\", exist_ok=True)
-file = r"\Archives\Spreadsheets\rawCSVLinks.csv"
+os.makedirs(rootFilesystem + "/Archives/Spreadsheets/Raw//", exist_ok=True)
+file = r"/Archives/Spreadsheets/rawCSVLinks.csv"
 with open(rootFilesystem + file) as f:
     data = csv.reader(f, delimiter=',', quotechar='|')
     for row in data:
         filename = row[0]
         updatelink = row[1]
         with requests.get(updatelink) as r:
-            with open(rootFilesystem + "\Archives\Spreadsheets\Raw\\" + filename, "wb") as y:
+            with open(rootFilesystem + "/Archives/Spreadsheets/Raw//" + filename, "wb") as y:
                 for data in r.iter_content():
                     y.write(data)
                 y.close()
@@ -364,7 +363,7 @@ CSVCleanerHeader = Label(CSVCleaner, text="CSV Cleaner", relief=GROOVE)
 CSVCleanerHeader.pack(fill=X)
 CSVCleanerSubtitle = Label(CSVCleaner, text="Select A File to Clean it:", anchor=NW)
 CSVCleanerSubtitle.pack(side=LEFT)
-rawCSVList = os.listdir(rootFilesystem + "\Archives\Spreadsheets\Raw")
+rawCSVList = os.listdir(rootFilesystem + "/Archives/Spreadsheets/Raw")
 rawCSVSelection = StringVar()
 rawCSVMenu = OptionMenu(CSVCleaner, rawCSVSelection, *rawCSVList or ["N/A"])
 rawCSVMenu.pack(side=RIGHT)
@@ -374,7 +373,7 @@ FilesystemMachineHeader = Label(FilesystemGenerator, text="Filesystem Generator"
 FilesystemMachineHeader.pack(fill=X)
 FilesystemMachineSubtitle = Label(FilesystemGenerator, text="Select A File Generate a Filesystem from it:", anchor=NW)
 FilesystemMachineSubtitle.pack(side=LEFT)
-cleanCSVList = os.listdir(rootFilesystem + "\Archives\Spreadsheets\Clean")
+cleanCSVList = os.listdir(rootFilesystem + "/Archives/Spreadsheets/Clean")
 cleanCSVSelection = StringVar()
 cleanCSVMenu = OptionMenu(FilesystemGenerator, cleanCSVSelection, *cleanCSVList or ["N/A"])
 cleanCSVMenu.pack(side=RIGHT)
@@ -385,7 +384,7 @@ p107links = ScrollableFrame(root)
 
 #Downloads most recent version of p107links.csv
 update = "https://docs.google.com/spreadsheets/d/1pbeSknaHltSXTcGcxGWI0xVWU2nBRP7EONp7yg1kFEY/export?format=csv&id=1pbeSknaHltSXTcGcxGWI0xVWU2nBRP7EONp7yg1kFEY&gid=763577821"
-file = "\Archives\Spreadsheets\p107Links.csv"
+file = "/Archives/Spreadsheets/p107Links.csv"
 with requests.get(update) as r:
     with open(rootFilesystem + file, "wb") as f:
         for data in r.iter_content():
@@ -393,7 +392,7 @@ with requests.get(update) as r:
         f.close()
 
 #Generates Timeline
-with open(rootFilesystem + "\Archives\Spreadsheets\p107Links.csv") as p107LinksCSV:
+with open(rootFilesystem + "/Archives/Spreadsheets/p107Links.csv") as p107LinksCSV:
     data = csv.reader(p107LinksCSV, delimiter=',', quotechar='|')
     years = []
     months = []
@@ -420,7 +419,7 @@ with open(rootFilesystem + "\Archives\Spreadsheets\p107Links.csv") as p107LinksC
 
                     xyz = Frame(tmp)
 
-                    Label(xyz, text="Year: " + date[0] + "\t|\t" + "Month: " + items + "\t|\t", name=str(date), anchor=NW).pack(side=LEFT)
+                    Label(xyz, text="Year: " + date[0] + "/t|/t" + "Month: " + items + "/t|/t", name=str(date), anchor=NW).pack(side=LEFT)
                     Button(xyz, text="Bravo", name="alpha"+date[0], command= partial(goto_url,links[1])).pack(side=RIGHT)
                     Button(xyz, text="Alpha", name="bravo"+date[0], command= partial(goto_url,links[0])).pack(side=RIGHT)
 
